@@ -1,0 +1,26 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.atguigu.gmall.manage.mapper.PmsBaseAttrInfoMapper">
+
+    <select id="selectAttrValuleListByValueId" resultMap="selectAttrValueListByValueIdMap">
+            SELECT
+                *,ba.id as ba_id,bv.id as bv_id
+            FROM
+                pms_base_attr_info ba,
+                pms_base_attr_value bv
+            WHERE
+                ba.id = bv.attr_id
+            AND
+                bv.id in (${valueIdStr})
+    </select>
+
+    <resultMap id="selectAttrValueListByValueIdMap" type="com.atguigu.gmall.bean.PmsBaseAttrInfo" autoMapping="true">  <!-- 将查询得到的结果集都映射到type所指定的类中 -->
+        <result column="ba_id" property="id"></result>  <!-- 设置主键id,否则会错误，mybatis不知道哪个是哪个的id -->
+        <collection property="attrValueList" ofType="com.atguigu.gmall.bean.PmsBaseAttrValue" autoMapping="true">  <!-- 将查询出来的集合保存给property指定的该类的属性中 -->
+            <result column="bv_id" property="id"></result> <!-- 设置主键id,否则会错误，mybatis不知道哪个是哪个的id，对应着该type类中的id -->
+        </collection>
+
+    </resultMap>
+
+</mapper>
